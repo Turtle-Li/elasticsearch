@@ -1,0 +1,4 @@
+elasticsearch:
+  hostname: 39.106.229.190
+  port: 9200
+  scheme: http
