@@ -85,31 +85,31 @@ public interface EsSearchService {
      * @param index
      * @param content 需要查询的名称
      * @param size 每一页需要获取多少条数据
-     * @param sortValues 从第几个数据开始
+     * @param page 页
      * @param ishigh 是否要高亮
      * @return 返回SearchHit[]的数据中的每一个元素都是一个对象 形如{{name=张三, age=12},{name=张三, age=13}}
      */
-    List<EsBlog> termQuery(String index, TreeMap<String, Object> content, int size, Object[] sortValues, boolean ishigh) throws IOException;
+    List<EsBlog> termQuery(String index, TreeMap<String, Object> content, int size, int page, boolean ishigh) throws IOException;
 
     /**
      * 使用分词器解析进行查询 (假如要查询的是张三,则会使用ik分词器进行解析,分成张和三),代码结构与上面的基本一样
      * @param index
      * @param content key：属性 value:查询的信息
      * @param size
-     * @param sortValues searchAfter值，[score，id]
+     * @param page
      * @return 返回的结果就不仅仅包含张三,也包含了姓张的用户的信息了
      */
-    List<EsBlog> matchQuery(String index, TreeMap<String, Object> content, int size, Object[] sortValues, boolean ishigh) throws IOException;
+    List<EsBlog> matchQuery(String index, TreeMap<String, Object> content, int size, int page, boolean ishigh) throws IOException;
 
     /**
      * 多条件match查询 并且是查的是并集(形如where name = 'zhan' and age = 12)
      * @param index
      * @param content key：属性 value:查询的信息
      * @param size
-     * @param from
+     * @param page
      * @throws IOException
      */
-    List<Map<String,Object>> boolmustQuery(String index, TreeMap<String, Object> content, int size, int from) throws IOException;
+    List<Map<String,Object>> boolmustQuery(String index, TreeMap<String, Object> content, int size, int page) throws IOException;
 }
 
 

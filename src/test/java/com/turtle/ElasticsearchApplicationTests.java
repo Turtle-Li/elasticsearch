@@ -25,7 +25,7 @@ class ElasticsearchApplicationTests {
 //        boolean b = esSearchService.deleteDocument("blog", "1");
         TreeMap<String,Object> map = new TreeMap<>();
         map.put("content","中华人名");
-        List<EsBlog> b = esSearchService.matchQuery("blog", map, 5,new Object[]{},true);
+        List<EsBlog> b = esSearchService.matchQuery("blog", map, 5,1,true);
         System.out.println(b);
     }
 

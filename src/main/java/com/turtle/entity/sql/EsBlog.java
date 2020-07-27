@@ -23,5 +23,5 @@ public class EsBlog {
     @Field(analyzer = "ik_max_word" ,type = FieldType.Text)
     private String content;
 
-    private float score;
+    private Float score;
 }

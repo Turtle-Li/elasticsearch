@@ -151,7 +151,7 @@ public class EsSearchServiceImpl implements EsSearchService {
 
 
     @Override
-    public List<EsBlog> termQuery(String index, TreeMap<String, Object> content, int size, Object[] sortValues, boolean ishigh) throws IOException {
+    public List<EsBlog> termQuery(String index, TreeMap<String, Object> content, int size, int page, boolean ishigh) throws IOException {
         SearchRequest searchRequest = new SearchRequest(index);
         //构建查询条件
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
@@ -162,13 +162,15 @@ public class EsSearchServiceImpl implements EsSearchService {
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
         //获取多少条数据
         sourceBuilder.size(size);
+        sourceBuilder.from((page-1)*size);
         //排序
         sourceBuilder.sort("_score",SortOrder.DESC);
         sourceBuilder.sort("id",SortOrder.ASC);
-        //从哪个id后开始
-        if(sortValues!=null && sortValues.length>0){
-            sourceBuilder.searchAfter(sortValues);
-        }
+
+//        //从哪个id后开始
+//        if(sortValues!=null && sortValues.length>0){
+//            sourceBuilder.searchAfter(sortValues);
+//        }
         //是否要将查询的结果中将搜索的关键词高亮
         if (ishigh){
             HighlightBuilder highlightBuilder = new HighlightBuilder();
@@ -208,7 +210,7 @@ public class EsSearchServiceImpl implements EsSearchService {
 
 
     @Override
-    public List<EsBlog> matchQuery(String index, TreeMap<String, Object> content, int size, Object[] sortValues, boolean ishigh) throws IOException {
+    public List<EsBlog> matchQuery(String index, TreeMap<String, Object> content, int size, int page, boolean ishigh) throws IOException {
         SearchRequest searchRequest = new SearchRequest(index);
         //构建查询条件
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
@@ -220,12 +222,14 @@ public class EsSearchServiceImpl implements EsSearchService {
 
         sourceBuilder.sort("_score",SortOrder.DESC);
         sourceBuilder.sort("id",SortOrder.ASC);
+
         //获取多少条数据
         sourceBuilder.size(size);
-        //从哪个id后开始
-        if(sortValues!=null && sortValues.length>0){
-            sourceBuilder.searchAfter(sortValues);
-        }
+        sourceBuilder.from((page-1)*size);
+//        //从哪个id后开始 适用滚动查询
+//        if(sortValues!=null && sortValues.length>0){
+//            sourceBuilder.searchAfter(sortValues);
+//        }
         //是否要高亮
         if (ishigh){
             HighlightBuilder highlightBuilder = new HighlightBuilder();
@@ -267,7 +271,7 @@ public class EsSearchServiceImpl implements EsSearchService {
 
 
     @Override
-    public List<Map<String,Object>> boolmustQuery(String index, TreeMap<String, Object> content, int size, int from) throws IOException {
+    public List<Map<String,Object>> boolmustQuery(String index, TreeMap<String, Object> content, int size, int page) throws IOException {
         SearchRequest searchRequest = new SearchRequest(index);
         //构建查询条件
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
@@ -283,7 +287,7 @@ public class EsSearchServiceImpl implements EsSearchService {
         //获取多少条数据
         sourceBuilder.size(size);
         //从第几行开始
-        sourceBuilder.from(from);
+        sourceBuilder.from((page-1)*size);
 
         //将查询条件放入需要查询中
         searchRequest.source(sourceBuilder);
